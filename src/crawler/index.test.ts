@@ -43,7 +43,7 @@ describe('crawl', () => {
 
     const results = await crawl('https://example.com', { maxPages: 1, maxDepth: 0 });
     expect(results).toHaveLength(1);
-    expect(results[0]!.url).toBe('https://example.com');
+    expect(results[0]!.url).toBe('https://example.com/');
     expect(results[0]!.statusCode).toBe(200);
     expect(results[0]!.html).toContain('<title>Test</title>');
     expect(results[0]!.fetchedAt).toBeInstanceOf(Date);
