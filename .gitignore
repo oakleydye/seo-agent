@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.env.local
+config.json
+*.google-credentials.json
+*.service-account.json
+.audit-state/

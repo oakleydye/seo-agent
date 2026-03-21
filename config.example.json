@@ -1,0 +1,21 @@
+{
+  "sites": [
+    {
+      "siteId": "acme-website",
+      "url": "https://acme.example.com",
+      "gitHubRepo": "acme-agency/acme-website",
+      "crawlLimits": {
+        "maxPages": 500,
+        "maxDepth": 3,
+        "timeoutMs": 30000,
+        "respectRobotsTxt": true
+      },
+      "googleCredentials": {
+        "serviceAccountPath": "./credentials/acme-service-account.json"
+      }
+    }
+  ],
+  "schedule": {
+    "cronExpression": "0 0 1 * *"
+  }
+}
