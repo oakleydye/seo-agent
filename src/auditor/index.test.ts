@@ -8,6 +8,7 @@ import {
   checkCanonicalTags,
   checkDuplicateContent,
 } from './rules.js';
+import { audit } from './index.js';
 import type { PageData } from '../types/index.js';
 
 function makePage(url: string, html: string, statusCode = 200): PageData {
@@ -181,5 +182,23 @@ describe('checkDuplicateContent', () => {
       makePage('https://a.com/other', `<html><body><p>${'Different content. '.repeat(15)}</p></body></html>`),
     ];
     expect(checkDuplicateContent(pages)).toHaveLength(0);
+  });
+});
+
+// ─── Audit Orchestrator ──────────────────────────────────────────────────────
+
+describe('audit orchestrator', () => {
+  it('runs all checks and returns combined Issue[]', () => {
+    const pages: PageData[] = [
+      makePage('https://a.com/', '<html><body><img src="x.jpg"></body></html>'),
+    ];
+    const issues = audit(pages);
+    // Missing title, missing meta desc, missing OG tags, missing H1, missing canonical, missing alt
+    expect(issues.length).toBeGreaterThan(0);
+    const rules = issues.map(i => i.rule);
+    expect(rules).toContain('missing-title-tag');
+    expect(rules).toContain('missing-meta-description');
+    expect(rules).toContain('missing-h1');
+    expect(rules).toContain('missing-alt-attribute');
   });
 });
