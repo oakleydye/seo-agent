@@ -60,7 +60,15 @@ Plans:
 5. Agent implements decision logic to categorize issues by risk (low-risk auto-fix vs needs-review), and only auto-submits low-risk fixes (meta tags, alt text, canonical tags, basic schema)
 6. Agent prevents quota exhaustion by caching Google API responses (24-48 hour TTL) and implementing exponential backoff for rate-limited requests
 
-**Plans:** TBD
+**Plans:** 6 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Foundation: extend types (Fix/FixCategory/RiskCategory/KeywordOpportunity), extend SiteConfig with fixPRTracking, add ApiCache and withRetry utilities
+- [ ] 02-02-PLAN.md — Fix generator + validator: LLM batch-per-file code generation via Portkey, next build validation in temp clone
+- [ ] 02-03-PLAN.md — Schema generator: schema.org JSON-LD generation with Ajv validation for Article, BreadcrumbList, WebPage, Organization
+- [ ] 02-04-PLAN.md — Search Console client: Google Search Console API with 24-48h caching and exponential backoff for keyword opportunity identification
+- [ ] 02-05-PLAN.md — Fix PR executor: createFixPR() with risk labels (seo-auto-fix, needs-review, first-run) and extended PR body formatter
+- [ ] 02-06-PLAN.md — Orchestrator + CLI: runFixForSite/runFixForAllSites pipeline + 'fix' Yargs command
 
 ---
 
@@ -88,7 +96,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Core Audit Discovery & PR Workflow | 5/5 | Complete   | 2026-03-21 |
-| 2. Auto-Fix & Content Strategy | 0/TBD | Not started | — |
+| 2. Auto-Fix & Content Strategy | 0/6 | Not started | — |
 | 3. Blog Post Generation | 0/TBD | Not started | — |
 
 ---
@@ -136,3 +144,4 @@ Plans:
 
 *Roadmap created: 2026-03-21*
 *Phase 1 plans created: 2026-03-21*
+*Phase 2 plans created: 2026-03-21*
