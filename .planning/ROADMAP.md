@@ -33,7 +33,14 @@
 5. Agent can be run monthly via cron schedule (`node-cron`) and manually via CLI with different site configurations
 6. Agent loads multiple client site configurations (GitHub repo URLs, auth credentials) from a config file and processes them in sequence without cross-site data leaks
 
-**Plans:** TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project scaffold: Node.js 20 + TypeScript setup, shared types, config loader, logger, Portkey stub
+- [ ] 01-02-PLAN.md — Crawler: HTTP page discovery with robots.txt, redirect loop detection, and crawl limits
+- [ ] 01-03-PLAN.md — SEO Auditor: seven on-page rule checks (title, meta desc, OG, canonical, headings, alt, duplicate content)
+- [ ] 01-04-PLAN.md — PageSpeed fetcher + PR formatter + GitHub PR executor
+- [ ] 01-05-PLAN.md — CLI + orchestrator: Yargs audit/schedule commands wiring the full pipeline
 
 ---
 
@@ -80,7 +87,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Audit Discovery & PR Workflow | 0/TBD | Not started | — |
+| 1. Core Audit Discovery & PR Workflow | 0/5 | Not started | — |
 | 2. Auto-Fix & Content Strategy | 0/TBD | Not started | — |
 | 3. Blog Post Generation | 0/TBD | Not started | — |
 
@@ -128,4 +135,4 @@
 ---
 
 *Roadmap created: 2026-03-21*
-*Next: `/gsd:plan-phase 1`*
+*Phase 1 plans created: 2026-03-21*
