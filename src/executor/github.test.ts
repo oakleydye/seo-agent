@@ -32,7 +32,10 @@ beforeEach(() => {
   vi.clearAllMocks();
   mockOctokit.pulls.list.mockResolvedValue({ data: [] });
   mockOctokit.repos.get.mockResolvedValue({ data: { default_branch: 'main' } });
-  mockOctokit.repos.getBranch.mockRejectedValueOnce({ status: 404 }); // branch doesn't exist
+  // First getBranch call: default branch (returns sha), second: audit branch (404 = doesn't exist)
+  mockOctokit.repos.getBranch
+    .mockResolvedValueOnce({ data: { commit: { sha: 'deadbeef' } } })
+    .mockRejectedValueOnce({ status: 404 });
   mockOctokit.git.createRef.mockResolvedValue({});
   mockOctokit.pulls.create.mockResolvedValue({
     data: { html_url: 'https://github.com/owner/repo/pull/1', number: 1 },
@@ -72,9 +75,11 @@ describe('createAuditPR', () => {
   });
 
   it('skips branch creation if branch already exists', async () => {
+    // Override beforeEach getBranch mocks: default branch returns sha, audit branch exists (no 404)
+    mockOctokit.repos.getBranch.mockReset();
     mockOctokit.repos.getBranch
       .mockResolvedValueOnce({ data: { commit: { sha: 'abc123' } } }) // default branch
-      .mockResolvedValueOnce({ data: {} }); // audit branch exists
+      .mockResolvedValueOnce({ data: {} }); // audit branch exists (no 404 = exists)
 
     await createAuditPR({ gitHubRepo: 'owner/repo', findings: baseFindings, githubToken: 'tok' });
     expect(mockOctokit.git.createRef).not.toHaveBeenCalled();
