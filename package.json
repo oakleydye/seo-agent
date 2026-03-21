@@ -4,13 +4,17 @@
   "description": "Autonomous SEO agent for Next.js sites",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "seo-agent": "dist/cli/index.js"
+  },
   "scripts": {
     "start": "tsx src/index.ts",
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "audit": "tsx src/cli/index.ts audit"
   },
   "engines": {
     "node": ">=20.0.0"
