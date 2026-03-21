@@ -102,13 +102,11 @@ describe('runAuditForSite', () => {
   it('returns AuditRunState with executionState.status=failed when createAuditPR throws — does not re-throw', async () => {
     mockCreateAuditPR.mockRejectedValue(new Error('GITHUB_TOKEN required'));
 
-    let result;
-    await expect(async () => {
-      result = await runAuditForSite(siteA, {});
-    }).not.toThrow();
+    // Should not throw — errors are captured in state
+    const result = await runAuditForSite(siteA, {});
 
-    expect(result!.executionState.status).toBe('failed');
-    expect(result!.executionState.error).toBe('GITHUB_TOKEN required');
+    expect(result.executionState.status).toBe('failed');
+    expect(result.executionState.error).toBe('GITHUB_TOKEN required');
   });
 });
 
