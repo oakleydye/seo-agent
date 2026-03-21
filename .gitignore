@@ -6,3 +6,4 @@ config.json
 *.google-credentials.json
 *.service-account.json
 .audit-state/
+.claude/
