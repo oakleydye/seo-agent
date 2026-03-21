@@ -37,11 +37,11 @@
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: CLI tool with commands for audit, fix, and content generation
-- [ ] **INFRA-02**: Portkey integration for flexible AI model selection
+- [x] **INFRA-01**: CLI tool with commands for audit, fix, and content generation
+- [x] **INFRA-02**: Portkey integration for flexible AI model selection
 - [ ] **INFRA-03**: Google Search Console API integration for SEO data
 - [ ] **INFRA-04**: GitHub API integration for PR creation and branch management
-- [ ] **INFRA-05**: Site configuration file for specifying client repo details
+- [x] **INFRA-05**: Site configuration file for specifying client repo details
 
 ## v2 Requirements
 
@@ -100,11 +100,11 @@
 | CONT-02 | 3 | Pending |
 | CONT-03 | 3 | Pending |
 | CONT-04 | 3 | Pending |
-| INFRA-01 | 1 | Pending |
-| INFRA-02 | 1 | Pending |
+| INFRA-01 | 1 | Complete |
+| INFRA-02 | 1 | Complete |
 | INFRA-03 | 1 | Pending |
 | INFRA-04 | 1 | Pending |
-| INFRA-05 | 1 | Pending |
+| INFRA-05 | 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 26 total
