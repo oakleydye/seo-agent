@@ -50,8 +50,13 @@ describe('fetchCoreWebVitals', () => {
   });
 
   it('returns null on 429 quota error without throwing', async () => {
+    vi.useFakeTimers();
     mockFetch.mockResolvedValue({ ok: false, status: 429 });
-    const vitals = await fetchCoreWebVitals('https://example.com', 'test-key');
+    const promise = fetchCoreWebVitals('https://example.com', 'test-key');
+    // Advance timers to skip all exponential backoff delays (1s + 2s + 4s = 7s max)
+    await vi.runAllTimersAsync();
+    const vitals = await promise;
+    vi.useRealTimers();
     expect(vitals).toBeNull();
   });
 
