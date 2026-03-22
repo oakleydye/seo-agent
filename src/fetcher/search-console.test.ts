@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Mock googleapis before importing the module under test
+// vi.hoisted ensures this runs before vi.mock hoisting, so the factory can capture it
+const { mockQuery } = vi.hoisted(() => ({ mockQuery: vi.fn() }));
+
 vi.mock('googleapis', () => {
-  const mockQuery = vi.fn();
   const MockGoogleAuth = vi.fn().mockImplementation(() => ({}));
 
   return {
@@ -16,7 +17,6 @@ vi.mock('googleapis', () => {
         },
       }),
     },
-    __mockQuery: mockQuery,
   };
 });
 
@@ -25,13 +25,8 @@ vi.mock('../utils/retry.js', () => ({
   withRetry: vi.fn((fn: () => Promise<unknown>) => fn()),
 }));
 
-import { google } from 'googleapis';
 import { withRetry } from '../utils/retry.js';
 import { SearchConsoleClient, createSearchConsoleClient } from './search-console.js';
-
-// Access the internal mock query fn via module augmentation trick
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getMockQuery = () => (google as any).__mockQuery as ReturnType<typeof vi.fn>;
 
 const mockRows = [
   { keys: ['seo optimization'], clicks: 50, impressions: 500, ctr: 0.1, position: 8.5 },
@@ -44,13 +39,13 @@ describe('SearchConsoleClient', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Re-configure the withRetry mock to pass through
+    // Re-configure the withRetry mock to pass through after clearAllMocks
     vi.mocked(withRetry).mockImplementation((fn: () => Promise<unknown>) => fn());
     client = new SearchConsoleClient('/fake/service-account.json');
   });
 
   it('returns keyword opportunities with correct scoring', async () => {
-    getMockQuery().mockResolvedValueOnce({ data: { rows: mockRows } });
+    mockQuery.mockResolvedValueOnce({ data: { rows: mockRows } });
 
     const results = await client.queryKeywords('https://example.com');
 
@@ -62,7 +57,7 @@ describe('SearchConsoleClient', () => {
   });
 
   it('filters keywords with impressions < 10 (default minImpressions)', async () => {
-    getMockQuery().mockResolvedValueOnce({ data: { rows: mockRows } });
+    mockQuery.mockResolvedValueOnce({ data: { rows: mockRows } });
 
     const results = await client.queryKeywords('https://example.com');
 
@@ -73,7 +68,7 @@ describe('SearchConsoleClient', () => {
   });
 
   it('respects custom minImpressions threshold', async () => {
-    getMockQuery().mockResolvedValueOnce({
+    mockQuery.mockResolvedValueOnce({
       data: {
         rows: [
           { keys: ['keyword a'], clicks: 5, impressions: 300, ctr: 0.02, position: 20 },
@@ -89,7 +84,7 @@ describe('SearchConsoleClient', () => {
   });
 
   it('sorts keywords by opportunityScore descending', async () => {
-    getMockQuery().mockResolvedValueOnce({ data: { rows: mockRows } });
+    mockQuery.mockResolvedValueOnce({ data: { rows: mockRows } });
 
     const results = await client.queryKeywords('https://example.com');
 
@@ -101,26 +96,26 @@ describe('SearchConsoleClient', () => {
   });
 
   it('returns cached response on second call without making an API call', async () => {
-    getMockQuery().mockResolvedValue({ data: { rows: mockRows } });
+    mockQuery.mockResolvedValue({ data: { rows: mockRows } });
 
     const first = await client.queryKeywords('https://example.com');
     const second = await client.queryKeywords('https://example.com');
 
-    expect(getMockQuery()).toHaveBeenCalledTimes(1);
+    expect(mockQuery).toHaveBeenCalledTimes(1);
     expect(first).toEqual(second);
   });
 
   it('makes separate API calls for different siteUrls', async () => {
-    getMockQuery().mockResolvedValue({ data: { rows: mockRows } });
+    mockQuery.mockResolvedValue({ data: { rows: mockRows } });
 
     await client.queryKeywords('https://site-a.com');
     await client.queryKeywords('https://site-b.com');
 
-    expect(getMockQuery()).toHaveBeenCalledTimes(2);
+    expect(mockQuery).toHaveBeenCalledTimes(2);
   });
 
   it('calls withRetry wrapping the GSC API call', async () => {
-    getMockQuery().mockResolvedValueOnce({ data: { rows: [] } });
+    mockQuery.mockResolvedValueOnce({ data: { rows: [] } });
 
     await client.queryKeywords('https://example.com');
 
@@ -135,7 +130,7 @@ describe('SearchConsoleClient', () => {
   });
 
   it('returns empty array when API returns no rows', async () => {
-    getMockQuery().mockResolvedValueOnce({ data: { rows: undefined } });
+    mockQuery.mockResolvedValueOnce({ data: { rows: undefined } });
 
     const results = await client.queryKeywords('https://example.com');
 
@@ -143,7 +138,7 @@ describe('SearchConsoleClient', () => {
   });
 
   it('returns empty array when API returns empty rows array', async () => {
-    getMockQuery().mockResolvedValueOnce({ data: { rows: [] } });
+    mockQuery.mockResolvedValueOnce({ data: { rows: [] } });
 
     const results = await client.queryKeywords('https://example.com');
 
@@ -151,7 +146,7 @@ describe('SearchConsoleClient', () => {
   });
 
   it('filters out keywords with empty key string', async () => {
-    getMockQuery().mockResolvedValueOnce({
+    mockQuery.mockResolvedValueOnce({
       data: {
         rows: [
           { keys: [''], clicks: 10, impressions: 100, ctr: 0.1, position: 5 },
@@ -167,7 +162,7 @@ describe('SearchConsoleClient', () => {
   });
 
   it('computes all KeywordOpportunity fields correctly', async () => {
-    getMockQuery().mockResolvedValueOnce({
+    mockQuery.mockResolvedValueOnce({
       data: {
         rows: [{ keys: ['test keyword'], clicks: 30, impressions: 300, ctr: 0.1, position: 5.7 }],
       },
