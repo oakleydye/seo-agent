@@ -39,6 +39,10 @@ export interface SiteConfig {
   googleCredentials: {
     serviceAccountPath: string; // path to Google service account JSON
   };
+  fixPRTracking?: {
+    submittedCount: number;
+    firstRunLimit: number;
+  };
 }
 
 export interface Config {
@@ -117,6 +121,10 @@ export const SiteConfigSchema = z.object({
   googleCredentials: z.object({
     serviceAccountPath: z.string(),
   }),
+  fixPRTracking: z.object({
+    submittedCount: z.number().int().nonnegative().default(0),
+    firstRunLimit: z.number().int().positive().default(5),
+  }).default({ submittedCount: 0, firstRunLimit: 5 }).optional(),
 });
 
 export const ConfigSchema = z.object({

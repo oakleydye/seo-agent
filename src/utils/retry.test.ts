@@ -50,9 +50,10 @@ describe('withRetry', () => {
     const fn = vi.fn().mockRejectedValue(error429);
 
     const promise = withRetry(fn, { maxRetries: 2, baseDelayMs: 100 });
+    // Attach rejection handler before running timers to avoid unhandled rejection
+    const rejection = expect(promise).rejects.toEqual(error429);
     await vi.runAllTimersAsync();
-
-    await expect(promise).rejects.toEqual(error429);
+    await rejection;
     expect(fn).toHaveBeenCalledTimes(3); // initial + 2 retries
   });
 
