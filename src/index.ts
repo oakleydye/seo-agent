@@ -131,3 +131,6 @@ export async function runAuditForAllSites(
 
   return results;
 }
+
+// Phase 2: Fix pipeline exports
+export { runFixForSite, runFixForAllSites, type RunFixOptions } from './fixer/index.js';
