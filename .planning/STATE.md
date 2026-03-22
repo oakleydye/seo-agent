@@ -5,13 +5,13 @@ milestone_name: milestone
 current_phase: 2
 current_plan: Not started
 status: unknown
-last_updated: "2026-03-22T15:12:17.775Z"
+last_updated: "2026-03-22T15:14:06.268Z"
 progress:
   total_phases: 3
   completed_phases: 1
   total_plans: 11
-  completed_plans: 7
-  percent: 64
+  completed_plans: 9
+  percent: 82
 ---
 
 # Project State: SEO Agent
@@ -35,7 +35,7 @@ Building Phase 1 foundation: autonomous crawling, issue detection, and PR submis
 ## Current Position
 
 **Phase:** 1 / 3
-**Progress:** [██████░░░░] 64%
+**Progress:** [████████░░] 82%
 
 ```
 [############                  ] 40%
@@ -67,6 +67,8 @@ Phase 1: Core Audit Discovery & PR Workflow
 | Phase 01-core-audit-discovery-pr-workflow P05 | 4 | 2 tasks | 6 files |
 | Phase 02-auto-fix-content-strategy P01 | 3 | 2 tasks | 6 files |
 | Phase 02-auto-fix-content-strategy P03 | 3 | 1 tasks | 4 files |
+| Phase 02-auto-fix-content-strategy P04 | 5 | 1 tasks | 4 files |
+| Phase 02-auto-fix-content-strategy P02 | 4 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -94,6 +96,10 @@ Phase 1: Core Audit Discovery & PR Workflow
 | Unhandled rejection in withRetry test fixed by registering .rejects handler before vi.runAllTimersAsync() — pattern applied going forward | 02-01 execution | ✓ Applied |
 | Used Ajv instead of schemaorg-jsd for JSON-LD validation — Ajv actively maintained (2025); schemaorg-jsd last updated 5 years ago | 02-03 execution | ✓ Applied |
 | Ajv validators compiled once at module load (not per-call) for performance — 4 validators stored in Record<SchemaType, ValidateFunction> | 02-03 execution | ✓ Applied |
+| vi.hoisted() required in vitest when vi.mock factory needs a shared fn reference — top-level const causes hoisting error before initialization | 02-04 execution | ✓ Applied |
+| execa with reject:false for npm build — non-zero exits return as result objects, not thrown exceptions | 02-02 execution | ✓ Applied |
+| Shallow clone (--depth 1) for build validation — full history not needed, faster clone | 02-02 execution | ✓ Applied |
+| googleapis package used (not @google-cloud/search-console) for GSC integration — plan specifies google.searchconsole('v1') API surface from googleapis | 02-04 execution | ✓ Applied |
 
 ### Safety Gates
 
@@ -150,8 +156,8 @@ Phase 1: Core Audit Discovery & PR Workflow
 
 ## Session Continuity
 
-**Last Session:** 2026-03-22T15:12:17.773Z
-**Completed:** 02-03-PLAN.md — Schema.org JSON-LD generator with Ajv validation, 15 tests passing (Article, BreadcrumbList, WebPage, Organization)
+**Last Session:** 2026-03-22T15:14:06.266Z
+**Completed:** 02-04-PLAN.md — SearchConsoleClient with GoogleAuth, 24-48h ApiCache TTL jitter, withRetry 429 backoff, opportunityScore keyword ranking, 12 tests passing
 **Next Action:** Continue Phase 2 plans
 
 **Files to Review:**
