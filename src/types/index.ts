@@ -125,3 +125,112 @@ export const ConfigSchema = z.object({
     cronExpression: z.string().min(1),
   }),
 });
+
+// ============================================================
+// Phase 2: Auto-Fix types
+// ============================================================
+
+export type FixCategory =
+  | 'title-tag'
+  | 'meta-description'
+  | 'og-tags'
+  | 'alt-text'
+  | 'heading-hierarchy'
+  | 'schema-markup';
+
+export type RiskCategory = 'low-risk' | 'needs-review';
+
+export interface FixPRTracking {
+  submittedCount: number;
+  firstRunLimit: number; // default 5 — first N PRs get 'first-run' label regardless of risk
+}
+
+export interface Fix {
+  id: string;               // unique ID for this fix, e.g. "fix-title-tag-2026-03-21"
+  category: FixCategory;
+  risk: RiskCategory;
+  sourceFile: string;       // relative path in client repo, e.g. "app/about/page.tsx"
+  originalContent: string;  // full file content before fix
+  fixedContent: string;     // full file content after LLM fix
+  issueIds: string[];       // Issue IDs that prompted this fix
+}
+
+export interface FixResult {
+  fix: Fix;
+  buildPassed: boolean;
+  buildError?: string;      // stderr/stdout from next build if it failed
+  submittedAsPR: boolean;
+  prUrl?: string;
+  prNumber?: number;
+}
+
+export interface FixRunState {
+  siteId: string;
+  runDate: string;          // ISO date string YYYY-MM-DD
+  fixState: {
+    status: 'pending' | 'complete' | 'failed';
+    fixCount: number;
+    prUrls: string[];
+    error?: string;
+  };
+}
+
+// ============================================================
+// Phase 2: Keyword opportunity types
+// ============================================================
+
+export interface KeywordOpportunity {
+  keyword: string;
+  clicks: number;
+  impressions: number;
+  ctr: number;              // click-through rate, 0-1
+  position: number;         // average position in SERPs
+  opportunityScore: number; // derived: impressions * (1 - ctr) — higher = more untapped traffic
+}
+
+// ============================================================
+// Phase 2: Risk classification
+// ============================================================
+
+/** Rules from the auditor that are safe to auto-fix (do not affect visible rendering). */
+export const LOW_RISK_RULES = [
+  'missing-title-tag',
+  'missing-meta-description',
+  'missing-og-tags',
+  'missing-alt-text',
+  'missing-canonical',
+  'invalid-schema-markup',
+] as const;
+
+/**
+ * Classify an audit issue as low-risk (auto-submittable) or needs-review.
+ * Low-risk: meta tags, alt text, canonical, schema — do not affect page rendering.
+ * Needs-review: heading hierarchy, structural HTML — affects visible content.
+ */
+export function categorizeFixRisk(issue: Issue): RiskCategory {
+  return (LOW_RISK_RULES as readonly string[]).includes(issue.rule) ? 'low-risk' : 'needs-review';
+}
+
+// ============================================================
+// Phase 2: Zod schemas
+// ============================================================
+
+export const FixCategorySchema = z.enum([
+  'title-tag',
+  'meta-description',
+  'og-tags',
+  'alt-text',
+  'heading-hierarchy',
+  'schema-markup',
+]);
+
+export const RiskCategorySchema = z.enum(['low-risk', 'needs-review']);
+
+export const KeywordOpportunitySchema = z.object({
+  keyword: z.string().min(1),
+  clicks: z.number().int().nonnegative(),
+  impressions: z.number().int().nonnegative(),
+  ctr: z.number().min(0).max(1),
+  position: z.number().positive(),
+  opportunityScore: z.number().nonnegative(),
+});
