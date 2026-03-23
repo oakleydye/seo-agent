@@ -87,7 +87,14 @@ Plans:
 4. Agent enforces content limits (max 1-3 posts/site/month) and maintains a content calendar to prevent keyword cannibalization and spacing issues across the portfolio
 5. Agent flags posts with unsupported claims or statistics for manual verification before merge, ensuring content quality and liability compliance
 
-**Plans:** TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Foundation: Phase 3 types (BlogPost, OriginalityCheck, ContentCalendarEntry, InternalLink, BlogRunState), extend SiteConfig with blogDirectory, install gray-matter + natural
+- [ ] 03-02-PLAN.md — Blog generator + plagiarism checker: Portkey blog generation (500+ words), Google Custom Search SERP fetch, TF-IDF cosine similarity originality scoring (>70% threshold)
+- [ ] 03-03-PLAN.md — Internal linker + claim flagger + content calendar: TF-IDF link discovery (2-5 per post), statistical claim heuristics, monthly limit enforcement (1-3/month), keyword cannibalization detection (90-day window)
+- [ ] 03-04-PLAN.md — Blog PR executor + pipeline orchestrator: createBlogPR() with gray-matter frontmatter, structured PR body, full runBlogPipelineForSite/ForAllSites with originality retry loop
+- [ ] 03-05-PLAN.md — CLI 'blog' command + index wiring: Yargs blog command, wire into CLI, export from src/index.ts
 
 ---
 
@@ -97,7 +104,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Core Audit Discovery & PR Workflow | 5/5 | Complete   | 2026-03-21 |
 | 2. Auto-Fix & Content Strategy | 6/6 | Complete   | 2026-03-22 |
-| 3. Blog Post Generation | 0/TBD | Not started | — |
+| 3. Blog Post Generation | 0/5 | Not started | — |
 
 ---
 
@@ -145,3 +152,4 @@ Plans:
 *Roadmap created: 2026-03-21*
 *Phase 1 plans created: 2026-03-21*
 *Phase 2 plans created: 2026-03-21*
+*Phase 3 plans created: 2026-03-23*
