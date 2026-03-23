@@ -43,6 +43,7 @@ export interface SiteConfig {
     submittedCount: number;
     firstRunLimit: number;
   };
+  blogDirectory?: string;       // e.g. "content/blog", "posts", "app/blog"
 }
 
 export interface Config {
@@ -125,6 +126,7 @@ export const SiteConfigSchema = z.object({
     submittedCount: z.number().int().nonnegative().default(0),
     firstRunLimit: z.number().int().positive().default(5),
   }).default({ submittedCount: 0, firstRunLimit: 5 }).optional(),
+  blogDirectory: z.string().optional(),
 });
 
 export const ConfigSchema = z.object({
@@ -241,4 +243,111 @@ export const KeywordOpportunitySchema = z.object({
   ctr: z.number().min(0).max(1),
   position: z.number().positive(),
   opportunityScore: z.number().nonnegative(),
+});
+
+// ============================================================
+// Phase 3: Blog post generation types
+// ============================================================
+
+export interface InternalLink {
+  anchorText: string;
+  targetUrl: string;
+  relevanceScore: number;   // 0-1, cosine similarity
+}
+
+export interface OriginalityCheck {
+  score: number;            // 0-100, originality %
+  comparedSources: string[]; // URLs of top 5 SERP results compared
+  passedThreshold: boolean; // score > 70
+  attempts: number;         // how many generation attempts were made (1-3)
+}
+
+export interface BlogPost {
+  slug: string;             // URL-safe, e.g. "how-to-improve-page-speed"
+  title: string;            // H1/page title with target keyword
+  description: string;      // SEO meta description (150-160 chars)
+  keywords: string[];       // primary + secondary keywords
+  publishedDate: string;    // ISO date string YYYY-MM-DD
+  author: string;           // e.g. "SEO Agent (AI-generated)"
+  content: string;          // Full Markdown body (500+ words)
+  targetKeyword: string;    // Primary keyword this post targets
+  wordCount: number;        // Computed: content.split(/\s+/).length
+}
+
+export interface BlogPostResult {
+  blogPost: BlogPost;
+  originalityCheck: OriginalityCheck;
+  internalLinks: InternalLink[];
+  flaggedClaims: string[];  // sentences flagged for human verification
+  submittedAsPR: boolean;
+  prUrl?: string;
+  prNumber?: number;
+  skippedReason?: string;   // e.g. "failed-originality-after-2-retries"
+}
+
+export interface ContentCalendarEntry {
+  siteId: string;
+  keyword: string;
+  publishedDate: string;    // ISO date string YYYY-MM-DD
+  slug: string;
+  prUrl: string;
+}
+
+export interface BlogRunState {
+  siteId: string;
+  runDate: string;          // ISO date string YYYY-MM-DD
+  contentState: {
+    status: 'pending' | 'complete' | 'failed';
+    postCount: number;
+    prUrls: string[];
+    error?: string;
+  };
+}
+
+// ============================================================
+// Phase 3: Zod schemas
+// ============================================================
+
+export const InternalLinkSchema = z.object({
+  anchorText: z.string().min(1),
+  targetUrl: z.string().url(),
+  relevanceScore: z.number().min(0).max(1),
+});
+
+export const OriginalityCheckSchema = z.object({
+  score: z.number().min(0).max(100),
+  comparedSources: z.array(z.string()),
+  passedThreshold: z.boolean(),
+  attempts: z.number().int().min(1).max(3),
+});
+
+export const BlogPostSchema = z.object({
+  slug: z.string().regex(/^[a-z0-9-]+$/, 'slug must be lowercase alphanumeric with hyphens'),
+  title: z.string().min(10).max(100),
+  description: z.string().min(50).max(165),
+  keywords: z.array(z.string().min(1)).min(1),
+  publishedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  author: z.string().min(1),
+  content: z.string().min(2000, 'content must be at least 2000 characters (~500 words)'),
+  targetKeyword: z.string().min(1),
+  wordCount: z.number().int().min(500),
+});
+
+export const BlogPostResultSchema = z.object({
+  blogPost: BlogPostSchema,
+  originalityCheck: OriginalityCheckSchema,
+  internalLinks: z.array(InternalLinkSchema),
+  flaggedClaims: z.array(z.string()),
+  submittedAsPR: z.boolean(),
+  prUrl: z.string().url().optional(),
+  prNumber: z.number().int().positive().optional(),
+  skippedReason: z.string().optional(),
+});
+
+export const ContentCalendarEntrySchema = z.object({
+  siteId: z.string().min(1),
+  keyword: z.string().min(1),
+  publishedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  slug: z.string().min(1),
+  prUrl: z.string().url(),
 });
