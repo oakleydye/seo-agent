@@ -87,7 +87,7 @@ Plans:
 4. Agent enforces content limits (max 1-3 posts/site/month) and maintains a content calendar to prevent keyword cannibalization and spacing issues across the portfolio
 5. Agent flags posts with unsupported claims or statistics for manual verification before merge, ensuring content quality and liability compliance
 
-**Plans:** 1/5 plans executed
+**Plans:** 3/5 plans executed
 
 Plans:
 - [ ] 03-01-PLAN.md — Foundation: Phase 3 types (BlogPost, OriginalityCheck, ContentCalendarEntry, InternalLink, BlogRunState), extend SiteConfig with blogDirectory, install gray-matter + natural
@@ -104,7 +104,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Core Audit Discovery & PR Workflow | 5/5 | Complete   | 2026-03-21 |
 | 2. Auto-Fix & Content Strategy | 6/6 | Complete   | 2026-03-22 |
-| 3. Blog Post Generation | 1/5 | In Progress|  |
+| 3. Blog Post Generation | 3/5 | In Progress|  |
 
 ---
 
