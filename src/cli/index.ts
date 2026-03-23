@@ -7,6 +7,7 @@ import { loadConfig } from '../config/loader.js';
 import { runAuditForAllSites } from '../index.js';
 import { auditCommand } from './commands/audit.js';
 import { fixCommand } from './commands/fix.js';
+import { blogCommand } from './commands/blog.js';
 import cron from 'node-cron';
 
 const cli = yargs(hideBin(process.argv))
@@ -14,6 +15,7 @@ const cli = yargs(hideBin(process.argv))
   .usage('$0 <command> [options]')
   .command(auditCommand)
   .command(fixCommand)
+  .command(blogCommand)
   .command({
     command: 'schedule',
     describe: 'Start the monthly cron scheduler',

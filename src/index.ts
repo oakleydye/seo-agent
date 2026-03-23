@@ -134,3 +134,6 @@ export async function runAuditForAllSites(
 
 // Phase 2: Fix pipeline exports
 export { runFixForSite, runFixForAllSites, type RunFixOptions } from './fixer/index.js';
+
+// Phase 3: Blog pipeline exports
+export { runBlogPipelineForSite, runBlogPipelineForAllSites, type RunBlogOptions } from './content/index.js';
