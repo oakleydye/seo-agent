@@ -116,11 +116,10 @@ export async function runBlogPipelineForSite(
       if (originalityCheck.passedThreshold) break;
 
       if (attempt === 2) {
-        // 3 attempts exhausted — skip keyword
+        // 3 attempts exhausted — skip keyword, record with skippedReason
         logger.warn({ siteId: site.siteId, keyword, score: originalityCheck.score }, 'Originality failed after 3 attempts — skipping keyword');
         skippedDueToOriginality = true;
-        blogPost = undefined;
-        originalityCheck = undefined;
+        // Note: blogPost and originalityCheck retained so we can log the skipped result
         break;
       }
 
@@ -128,7 +127,13 @@ export async function runBlogPipelineForSite(
     }
 
     if (generationFailed) continue;
-    if (skippedDueToOriginality) continue;
+
+    if (skippedDueToOriginality && blogPost && originalityCheck) {
+      // Record the skipped keyword result for reporting purposes
+      logger.info({ siteId: site.siteId, keyword }, 'Keyword skipped: failed-originality-after-2-retries');
+      continue;
+    }
+
     if (!blogPost || !originalityCheck) continue;
 
     // ─── Internal linking ────────────────────────────────────────────────
