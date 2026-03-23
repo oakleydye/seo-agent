@@ -23,27 +23,33 @@ vi.mock('../portkey/client.js', () => ({
 
 const VALID_MARKDOWN = `# How to Improve Page Speed
 
-Page speed is a critical ranking factor in modern SEO. When your site loads slowly, users bounce and search engines penalise it. In this guide we will walk through the most impactful optimizations you can make today.
+Page speed is a critical ranking factor in modern SEO. When your site loads slowly, users bounce and search engines penalise it. In this guide we will walk through the most impactful optimizations you can make today to dramatically improve your site's performance metrics and user experience.
 
-## Why Page Speed Matters
+## Why Page Speed Matters for SEO
 
-Studies show that a 1-second delay in page load time can reduce conversions by 7% [FACT-CHECK]. Google has used page speed as a ranking signal since 2010, and with Core Web Vitals now part of the algorithm, it has never been more important.
+Studies show that a 1-second delay in page load time can reduce conversions by 7% [FACT-CHECK]. Google has used page speed as a ranking signal since 2010, and with Core Web Vitals now part of the algorithm, it has never been more important for your website's search performance and overall visibility.
 
-Fast sites also improve user experience across all devices. Mobile users in particular expect near-instant responses — more than half abandon a page that takes longer than 3 seconds to load [FACT-CHECK].
+Fast sites also improve user experience across all devices. Mobile users in particular expect near-instant responses — more than half abandon a page that takes longer than 3 seconds to load [FACT-CHECK]. Reducing your time-to-first-byte (TTFB) alone can have measurable impact on both rankings and revenue.
 
-## Key Optimizations to Implement
+Search engines crawl faster sites more efficiently too. A slow site wastes crawl budget, meaning Google may not index all your pages in a timely fashion. This is especially relevant for large e-commerce sites with thousands of product pages.
 
-The most impactful steps are: compressing images (use WebP format where possible), enabling browser caching, minifying CSS and JavaScript, and using a content delivery network (CDN) to serve assets from edge locations close to your users.
+## Key Optimizations to Implement Today
 
-Server-side improvements matter too. Upgrading to HTTP/2, optimising database queries, and enabling GZIP compression on your web server can cut load times dramatically.
+The most impactful steps for page speed improvement are: compressing images (use WebP format where possible), enabling browser caching with appropriate cache-control headers, minifying CSS and JavaScript bundles, and using a content delivery network (CDN) to serve assets from edge locations close to your users.
+
+Server-side improvements matter too. Upgrading to HTTP/2, optimising database queries to reduce execution time, enabling GZIP or Brotli compression on your web server, and implementing lazy loading for below-the-fold images can all cut load times dramatically. Consider moving to a faster hosting provider if your current infrastructure is the bottleneck.
+
+Critical rendering path optimization is another area worth investigating. Eliminating render-blocking resources, inlining critical CSS, and deferring non-essential JavaScript can shave hundreds of milliseconds off your perceived load time — which matters enormously for user experience.
 
 ## Measuring Your Progress
 
-Use Google PageSpeed Insights to benchmark your current score and track improvements. Aim for a Lighthouse performance score above 90. Tools like WebPageTest let you run tests from multiple global locations so you can see how real-world users experience your site.
+Use Google PageSpeed Insights to benchmark your current score and track improvements over time. Aim for a Lighthouse performance score above 90. Tools like WebPageTest let you run tests from multiple global locations so you can see how real-world users experience your site regardless of where they are located.
+
+Set up monitoring with Real User Monitoring (RUM) tools to capture actual performance data from live visitors. Synthetic monitoring gives you a baseline, but real user data reveals the full picture including slow connections and older devices that your lab environment may not simulate accurately.
 
 ## Conclusion
 
-Improving page speed is one of the highest-ROI technical SEO investments you can make. Start with image compression and caching, measure your baseline, and work through the checklist systematically. Your users — and search rankings — will thank you.
+Improving page speed is one of the highest-ROI technical SEO investments you can make. Start with image compression and browser caching, measure your baseline with PageSpeed Insights, and work through the optimization checklist systematically. Small wins compound: even shaving 200ms from your load time can measurably improve your Core Web Vitals scores and search rankings. Your users — and your conversion rates — will thank you.
 `;
 
 describe('generator', () => {
